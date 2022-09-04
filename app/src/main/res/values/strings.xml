@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ExScorp</string>
+    <string name="message_loading">Data is loading… Please, you wait.</string>
+</resources>
