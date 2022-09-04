@@ -30,7 +30,7 @@ class MainViewModel : ViewModel() {
         }
         viewModelScope.launch {
             try {
-                dataSource.fetch("1") { response, error ->
+                dataSource.fetch(pageNext) { response, error ->
                     val errorMessage = error?.errorDescription
                     if (!errorMessage.isNullOrEmpty()) {
                         _liveDataPeople.value = Response(null, Status.ERROR, errorMessage)
@@ -39,6 +39,10 @@ class MainViewModel : ViewModel() {
                     val people = response?.people
                     if (people.isNullOrEmpty()) {
                         _liveDataPeople.value = Response(null, Status.ERROR, "Person not found!")
+                        return@fetch
+                    }
+                    if (!response.next.checkNext()) {
+                        _liveDataPeople.value = Response(null, Status.ERROR, "An error occurred")
                         return@fetch
                     }
                     _liveDataPeople.value = Response(response.people, Status.SUCCESS, "")
