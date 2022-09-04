@@ -2,6 +2,7 @@ package com.example.exscorp.scenes
 
 import DataSource
 import Person
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 dataSource.fetch(pageNext) { response, error ->
+                    isItLoadingPeople = false
                     val errorMessage = error?.errorDescription
                     if (!errorMessage.isNullOrEmpty()) {
                         _liveDataPeople.value = Response(null, Status.ERROR, errorMessage)
@@ -42,14 +44,15 @@ class MainViewModel : ViewModel() {
                         return@fetch
                     }
                     if (!response.next.checkNext()) {
-                        _liveDataPeople.value = Response(null, Status.ERROR, "An error occurred")
+                        _liveDataPeople.value = Response(null, Status.ERROR, "An error occurred, end of data!")
                         return@fetch
                     }
                     _liveDataPeople.value = Response(response.people, Status.SUCCESS, "")
                     pageNext = response.next ?: "1"
-                    isItLoadingPeople = false
+                    Log.e("page",pageNext)
                 }
             } catch (ex: Exception) {
+                isItLoadingPeople = false
                 _liveDataPeople.value = Response(null, Status.ERROR, "An error occurred")
             }
         }

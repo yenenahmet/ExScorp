@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.27760416666666665" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20989583333333334" />
+        <entry key="app/src/main/res/layout/dialog_error.xml" value="0.30364583333333334" />
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.271875" />
         <entry key="app/src/main/res/layout/item_person.xml" value="0.2625" />
       </map>

@@ -26,8 +26,18 @@ class PeopleAdapter(private var items: MutableList<Person> = mutableListOf()) :
     override fun getItemCount() = items.size
 
     fun addPeople(people: List<Person>) {
-        items.addAll(people)
+        items.addAll(getDataWithCheckedId(people))
         notifyDataSetChanged()
+    }
+
+    private fun getDataWithCheckedId(people: List<Person>):List<Person>{
+        val filterItems = mutableListOf<Person>()
+        people.forEach { person->
+            if(items.filter { it.id ==  person.id}.isNullOrEmpty()){
+                filterItems.add(person)
+            }
+        }
+        return filterItems
     }
 
     class ViewHolder(

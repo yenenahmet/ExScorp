@@ -22,14 +22,19 @@ class LoadingDialog(private val activity: Activity) : Dialog(activity) {
 
     fun showDialog() {
         if (!activity.isFinishing) {
-            show()
+            activity.runOnUiThread {
+                show()
+            }
         }
     }
 
     fun dismissDialog() {
         try {
-            if (!activity.isFinishing && isShowing)
-                dismiss()
+            if (!activity.isFinishing && isShowing){
+                activity.runOnUiThread {
+                    dismiss()
+                }
+            }
         }catch (ignored:Exception){}
     }
 

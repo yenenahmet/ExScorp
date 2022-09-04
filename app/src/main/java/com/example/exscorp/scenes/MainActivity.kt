@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.exscorp.BaseActivity
 import com.example.exscorp.listeners.PaginationScrollListener
 import com.example.exscorp.databinding.ActivityMainBinding
+import com.example.exscorp.dilog.ErrorDialog
 import com.example.exscorp.dilog.LoadingDialog
 import com.example.exscorp.model.Status
 
@@ -15,6 +16,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(MainViewMo
 
     private val adapter = PeopleAdapter()
     private lateinit var loadingDialog:LoadingDialog
+    private lateinit var errorDialog:ErrorDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(MainViewMo
     private fun initView(){
         binding.recyclerView.adapter = adapter
         loadingDialog = LoadingDialog(this)
+        errorDialog = ErrorDialog(this)
     }
 
     private fun observeViewModel(){
@@ -37,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(MainViewMo
                 if(response.status == Status.SUCCESS){
                     initData(response?.data?: mutableListOf())
                 }else{
-                    showToast(response?.errMessage?:"")
+                    errorDialog.showDialog(response?.errMessage?:"")
                 }
             })
         }
@@ -62,11 +65,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(MainViewMo
         })
     }
 
-    private fun showToast(message:String){
-        runOnUiThread {
-            Toast.makeText(this,message,Toast.LENGTH_LONG).show()
-        }
-    }
 
     override fun getViewBinding(inflater: LayoutInflater): ActivityMainBinding {
         return ActivityMainBinding.inflate(inflater)
